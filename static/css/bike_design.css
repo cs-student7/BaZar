@@ -1,0 +1,666 @@
+/* ==================== RESET & VARIABLES ==================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #2ecc71;
+    --primary-dark: #27ae60;
+    --secondary: #3498db;
+    --danger: #e74c3c;
+    --dark: #2c3e50;
+    --light: #ecf0f1;
+    --border: #bdc3c7;
+    --shadow: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6fa;
+    overflow: hidden;
+}
+
+/* ==================== CONTAINER ==================== */
+
+.design-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    background: #f5f6fa;
+}
+
+/* ==================== HEADER ==================== */
+
+.design-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+    background: linear-gradient(135deg, #1a252f 0%, #2c3e50 100%);
+    color: white;
+    box-shadow: var(--shadow-lg);
+    z-index: 100;
+}
+
+.header-left h1 {
+    font-size: 28px;
+    margin-bottom: 5px;
+    letter-spacing: -0.5px;
+}
+
+.design-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+}
+
+.header-right {
+    display: flex;
+    gap: 15px;
+}
+
+/* ==================== BUTTONS ==================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46,204,113,0.3);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.3);
+}
+
+.btn-save {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-save:hover {
+    background: var(--primary-dark);
+}
+
+.btn-download {
+    background: var(--secondary);
+    color: white;
+}
+
+.btn-download:hover {
+    background: #2980b9;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.btn-small.danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-small.danger:hover {
+    background: #c0392b;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+
+.main-content {
+    display: flex;
+    flex: 1;
+    gap: 15px;
+    padding: 15px;
+    overflow: hidden;
+}
+
+/* ==================== TOOLBAR ==================== */
+
+.toolbar {
+    width: 280px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.toolbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.toolbar::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+.toolbar::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
+
+.toolbar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toolbar-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 5px;
+}
+
+.tool-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tool-btn {
+    padding: 12px 15px;
+    background: #f8f9fa;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    color: var(--dark);
+    text-align: left;
+}
+
+.tool-btn:hover {
+    border-color: var(--primary);
+    background: #fff;
+    color: var(--primary);
+}
+
+.tool-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary-dark);
+    box-shadow: 0 2px 8px rgba(46,204,113,0.3);
+}
+
+/* ==================== COLOR PALETTE ==================== */
+
+.color-palette {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.color-item {
+    width: 100%;
+    height: 45px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.color-item:hover {
+    transform: scale(1.05);
+    border-color: var(--dark);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* ==================== SETTINGS ==================== */
+
+.setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.setting-item label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.setting-item input[type="range"] {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--border);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.setting-item input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.setting-item input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: none;
+}
+
+#sizeLabel {
+    font-size: 12px;
+    color: #666;
+}
+
+.setting-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+}
+
+/* ==================== ACTION BUTTONS ==================== */
+
+.action-btn {
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+
+.action-btn.clear:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(231,76,60,0.05);
+}
+
+/* ==================== CANVAS AREA ==================== */
+
+.canvas-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.canvas-container {
+    flex: 1;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#bikeCanvas {
+    display: block;
+    cursor: crosshair;
+    max-width: 100%;
+    max-height: 100%;
+    background: white;
+}
+
+.canvas-label {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(44,62,80,0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* ==================== SAVE PANEL ==================== */
+
+.save-panel {
+    background: white;
+    padding: 15px 30px;
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+}
+
+.save-content {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    max-width: 1400px;
+}
+
+.save-input-wrapper {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.save-input-wrapper label {
+    font-weight: 600;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+#designName {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: inherit;
+    transition: all 0.2s ease;
+}
+
+#designName:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(46,204,113,0.1);
+}
+
+.save-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ==================== MODALS ==================== */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+.modal-content.large {
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.2s ease;
+}
+
+.modal-close:hover {
+    color: var(--dark);
+}
+
+.success-icon {
+    font-size: 48px;
+    margin: 20px 0;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: var(--dark);
+    text-align: center;
+}
+
+.modal-content p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+/* ==================== DESIGNS LIST ==================== */
+
+.designs-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.design-card {
+    padding: 15px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
+}
+
+.design-card:hover {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.design-info h3 {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: var(--dark);
+}
+
+.design-info p {
+    font-size: 11px;
+    color: #999;
+}
+
+.design-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.design-actions .btn {
+    flex: 1;
+    padding: 6px 10px;
+    text-align: center;
+    justify-content: center;
+}
+
+.empty,
+.loading,
+.error {
+    text-align: center;
+    padding: 30px;
+    color: #999;
+    font-size: 14px;
+}
+
+.error {
+    color: var(--danger);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 1024px) {
+    .toolbar {
+        width: 250px;
+    }
+
+    .main-content {
+        gap: 10px;
+    }
+
+    .save-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .save-input-wrapper {
+        width: 100%;
+    }
+
+    .save-actions {
+        width: 100%;
+    }
+
+    .save-actions .btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column;
+    }
+
+    .toolbar {
+        width: 100%;
+        max-height: 200px;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .toolbar-section {
+        min-width: 200px;
+    }
+
+    #bikeCanvas {
+        max-width: 100%;
+    }
+
+    .design-header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .toolbar {
+        gap: 15px;
+    }
+
+    .tool-group {
+        gap: 5px;
+    }
+
+    .tool-btn {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .designs-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== SCROLLBAR ==================== */
+
+.modal-content.large::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content.large::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content.large::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+
+.modal-content.large::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}

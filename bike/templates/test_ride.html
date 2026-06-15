@@ -1,0 +1,471 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Test Ride - BaZar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo"> BaZar</div>
+            
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+    
+                </div>
+
+                <!-- PACKAGE INFO -->
+                <div class="package-info">
+                    <h3>📦 What's Included?</h3>
+                    <ul class="features-list">
+                        <li>✓ 30-minute test ride</li>
+                        <li>✓ Professional instructor</li>
+                        <li>✓ Free helmet & safety gear</li>
+                        <li>✓ Insurance covered</li>
+                        <li>✓ Refreshments provided</li>
+                        <li>✓ Expert consultation</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- RIGHT SECTION: BOOKING FORM -->
+            <section class="booking-form-section">
+                <h2>Your Information</h2>
+
+                <form class="booking-form" id="testRideForm">
+                    
+                    <!-- PERSONAL DETAILS -->
+                    <fieldset class="form-section">
+                        <legend>Personal Details</legend>
+                        
+                        <div class="form-group">
+                            <label for="firstName">
+                                <span class="label-icon">👤</span>
+                                First Name
+                            </label>
+                            <input 
+                                type="text" 
+                                id="firstName" 
+                                name="firstName" 
+                                placeholder="John"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">
+                                <span class="label-icon">👤</span>
+                                Last Name
+                            </label>
+                            <input 
+                                type="text" 
+                                id="lastName" 
+                                name="lastName" 
+                                placeholder="Doe"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                <span class="label-icon">📧</span>
+                                Email Address
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                placeholder="john@example.com"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                <span class="label-icon">📱</span>
+                                Phone Number
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                placeholder="+977 9841234567"
+                                required
+                            >
+                        </div>
+                    </fieldset>
+
+                    <!-- ADDRESS DETAILS -->
+                    <fieldset class="form-section">
+                        <legend>Address Details</legend>
+
+                        <div class="form-group">
+                            <label for="address">
+                                <span class="label-icon">📍</span>
+                                Street Address
+                            </label>
+                            <input 
+                                type="text" 
+                                id="address" 
+                                name="address" 
+                                placeholder="123 Main Street"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">
+                                    <span class="label-icon">🏙️</span>
+                                    City
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="city" 
+                                    name="city" 
+                                    placeholder="Kathmandu"
+                                    required
+                                >
+                            </div>
+
+                            <div class="form-group">
+                                <label for="district">
+                                    <span class="label-icon">📍</span>
+                                    District
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="district" 
+                                    name="district" 
+                                    placeholder="Bagmati"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="zipCode">
+                                <span class="label-icon">📦</span>
+                                Zip Code
+                            </label>
+                            <input 
+                                type="text" 
+                                id="zipCode" 
+                                name="zipCode" 
+                                placeholder="44600"
+                            >
+                        </div>
+                    </fieldset>
+
+                    <!-- LICENSE DETAILS -->
+                    <fieldset class="form-section">
+                        <legend>License & Preferences</legend>
+
+                        <div class="form-group">
+                            <label for="licenseNumber">
+                                <span class="label-icon">🪪</span>
+                                License Number
+                            </label>
+                            <input 
+                                type="text" 
+                                id="licenseNumber" 
+                                name="licenseNumber" 
+                                placeholder="BA 1234567"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="experience">
+                                <span class="label-icon">🎓</span>
+                                Riding Experience
+                            </label>
+                            <select id="experience" name="experience" required>
+                                <option value="">Select your experience level</option>
+                                <option value="beginner">Beginner (0-1 year)</option>
+                                <option value="intermediate">Intermediate (1-3 years)</option>
+                                <option value="advanced">Advanced (3+ years)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bikeType">
+                                <span class="label-icon">🏍️</span>
+                                Bike Type Preference
+                            </label>
+                            <select id="bikeType" name="bikeType" required>
+                                <option value="">Select preference</option>
+                                <option value="cruiser">Cruiser</option>
+                                <option value="sport">Sport Bike</option>
+                                <option value="commuter">Commuter</option>
+                                <option value="adventure">Adventure</option>
+                                <option value="naked">Naked Bike</option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="bikeType">
+                                <span class="label-icon">🏍️</span>
+                                Add Bikes
+                            </label>
+                            <select id="bikeType" name="bikeType" required>
+                                <option value="ktm_duke_390">KTM Duke 390</option>
+<option value="ktm_rc_390">KTM RC 390</option>
+<option value="ktm_duke_250">KTM Duke 250</option>
+<option value="yamaha_r15_v4">Yamaha R15 V4</option>
+<option value="yamaha_mt_15">Yamaha MT-15</option>
+<option value="yamaha_fz_s_v3">Yamaha FZ-S V3</option>
+<option value="yamaha_r3">Yamaha R3</option>
+<option value="bajaj_pulsar_ns200">Bajaj Pulsar NS200</option>
+<option value="bajaj_pulsar_rs200">Bajaj Pulsar RS200</option>
+<option value="bajaj_pulsar_220f">Bajaj Pulsar 220F</option>
+<option value="bajaj_dominar_400">Bajaj Dominar 400</option>
+<option value="bajaj_pulsar_n160">Bajaj Pulsar N160</option>
+<option value="honda_cbr_150r">Honda CBR 150R</option>
+<option value="honda_x_blade">Honda X-Blade</option>
+<option value="honda_hornet_2_0">Honda Hornet 2.0</option>
+<option value="honda_cb350">Honda CB350</option>
+<option value="honda_cb_unicorn">Honda CB Unicorn</option>
+<option value="royal_enfield_classic_350">Royal Enfield Classic 350</option>
+<option value="royal_enfield_hunter_350">Royal Enfield Hunter 350</option>
+<option value="royal_enfield_meteor_350">Royal Enfield Meteor 350</option>
+<option value="royal_enfield_himalayan">Royal Enfield Himalayan</option>
+<option value="royal_enfield_interceptor_650">Royal Enfield Interceptor 650</option>
+<option value="royal_enfield_continental_gt_650">Royal Enfield Continental GT 650</option>
+<option value="tvs_apache_rtr_160">TVS Apache RTR 160</option>
+<option value="tvs_apache_rtr_200">TVS Apache RTR 200</option>
+<option value="tvs_apache_rr_310">TVS Apache RR 310</option>
+<option value="tvs_raider_125">TVS Raider 125</option>
+<option value="suzuki_gixxer">Suzuki Gixxer</option>
+<option value="suzuki_gixxer_sf">Suzuki Gixxer SF</option>
+<option value="suzuki_v_strom_250">Suzuki V-Strom 250</option>
+<option value="kawasaki_ninja_300">Kawasaki Ninja 300</option>
+<option value="kawasaki_ninja_400">Kawasaki Ninja 400</option>
+<option value="kawasaki_z650">Kawasaki Z650</option>
+<option value="kawasaki_ninja_650">Kawasaki Ninja 650</option>
+<option value="bmw_g310r">BMW G 310 R</option>
+<option value="bmw_g310gs">BMW G 310 GS</option>
+<option value="bmw_s1000rr">BMW S1000RR</option>
+<option value="benelli_trk_251">Benelli TRK 251</option>
+<option value="benelli_trk_502">Benelli TRK 502</option>
+<option value="benelli_302r">Benelli 302R</option>
+<option value="ducati_monster">Ducati Monster</option>
+<option value="ducati_panigale_v2">Ducati Panigale V2</option>
+<option value="ducati_scrambler">Ducati Scrambler</option>
+<option value="triumph_street_triple">Triumph Street Triple</option>
+<option value="triumph_trident_660">Triumph Trident 660</option>
+<option value="triumph_tiger_900">Triumph Tiger 900</option>
+<option value="harley_davidson_x440">Harley Davidson X440</option>
+<option value="harley_iron_883">Harley Iron 883</option>
+<option value="cfmoto_300nk">CFMoto 300NK</option>
+<option value="cfmoto_650nk">CFMoto 650NK</option>
+<option value="hero_xtreme_160r">Hero Xtreme 160R</option>
+<option value="hero_xpulse_200">Hero XPulse 200</option>
+<option value="hero_hf_deluxe">Hero HF Deluxe</option>
+<option value="hero_splendor_plus">Hero Splendor Plus</option>
+                        </select>
+                        </div>
+                        
+                        
+
+
+
+
+
+                    </fieldset>
+
+                    <!-- TEST RIDE DETAILS -->
+                    <fieldset class="form-section">
+                        <legend>Test Ride Schedule</legend>
+
+                        <div class="form-group">
+                            <label for="testDate">
+                                <span class="label-icon">📅</span>
+                                Preferred Date
+                            </label>
+                            <input 
+                                type="date" 
+                                id="testDate" 
+                                name="testDate"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="testTime">
+                                <span class="label-icon">⏰</span>
+                                Preferred Time
+                            </label>
+                            <select id="testTime" name="testTime" required>
+                                <option value="">Select time slot</option>
+                                <option value="08:00">08:00 AM</option>
+                                <option value="09:00">09:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="14:00">02:00 PM</option>
+                                <option value="15:00">03:00 PM</option>
+                                <option value="16:00">04:00 PM</option>
+                                <option value="17:00">05:00 PM</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">
+                                <span class="label-icon">📍</span>
+                                Test Ride Location
+                            </label>
+                            <select id="location" name="location" required>
+                                <option value="">Select location</option>
+                                <option value="kathmandu">Kathmandu Showroom</option>
+                                <option value="pokhara">Pokhara Showroom</option>
+                                <option value="biratnagar">Biratnagar Showroom</option>
+                                <option value="dharan">Dharan Showroom</option>
+                            </select>
+                        </div>
+                    </fieldset>
+
+                    <!-- MESSAGE -->
+                    <fieldset class="form-section">
+                        <legend>Additional Information</legend>
+
+                        <div class="form-group">
+                            <label for="message">
+                                <span class="label-icon">💬</span>
+                                Special Requests or Questions
+                            </label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                placeholder="Tell us anything you'd like us to know..."
+                                rows="4"
+                            ></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- AGREEMENTS -->
+                    <fieldset class="form-section">
+                        <legend>Agreements</legend>
+
+                        <div class="checkbox-group">
+                            <input 
+                                type="checkbox" 
+                                id="termsCheck" 
+                                name="termsCheck"
+                                required
+                            >
+                            <label for="termsCheck" class="checkbox-label">
+                                I agree to the Terms & Conditions and Liability Waiver
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input 
+                                type="checkbox" 
+                                id="notificationCheck" 
+                                name="notificationCheck"
+                            >
+                            <label for="notificationCheck" class="checkbox-label">
+                                Send me updates about bikes and test ride confirmations
+                            </label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input 
+                                type="checkbox" 
+                                id="helmetCheck" 
+                                name="helmetCheck"
+                                required
+                            >
+                            <label for="helmetCheck" class="checkbox-label">
+                                I understand helmets are mandatory and will follow safety guidelines
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <!-- SUBMIT BUTTON -->
+                    <button type="submit" class="submit-btn">
+                        <span class="btn-icon">🚀</span>
+                        <span class="btn-text">Book My Test Ride Now</span>
+                    </button>
+
+                    <p class="form-note">
+                        ✓ We'll confirm your booking within few minutes via email & SMS
+                    </p>
+                </form>
+            </section>
+        </div>
+
+        <!-- INFO CARDS -->
+        <section class="info-cards">
+            <div class="info-card">
+                <div class="card-icon">🛡️</div>
+                <h3>100% Safe</h3>
+                <p>Full insurance coverage during test ride</p>
+            </div>
+
+            <div class="info-card">
+                <div class="card-icon">⏱️</div>
+                <h3>30 Minutes</h3>
+                <p>Enjoy a complete test ride experience</p>
+            </div>
+
+            <div class="info-card">
+                <div class="card-icon">👨‍🏫</div>
+                <h3>Expert Guide</h3>
+                <p>Professional instructors with you always</p>
+            </div>
+
+            <div class="info-card">
+                <div class="card-icon">🎉</div>
+                <h3>No Obligations</h3>
+                <p>Completely free, no strings attached</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>BaZar</h4>
+                <p>Your ultimate motorcycle shopping platform</p>
+            </div>
+            
+               
+            
+    
+      
+    </footer>
+
+    <script>
+        // Form submission
+        document.getElementById('testRideForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            // Show success message
+            alert('✓ Test ride booked successfully! Check your email for confirmation.');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Date picker - disable past dates
+        const dateInput = document.getElementById('testDate');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.setAttribute('min', today);
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+{% extends 'bike.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="search-container">
+
+    <!-- 🔍 SEARCH BAR -->
+    <div class="search-section">
+        <h1>Search Bikes</h1>
+
+        <form class="search-form" method="GET" action="{% url 'bike_list' %}">
+            <input 
+                type="text" 
+                name="search" 
+                placeholder="Search by brand or name..."
+                value="{{ query }}"
+            >
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- 📊 SEARCH RESULT INFO -->
+    {% if search_performed %}
+        <p>
+            {% if results_count > 0 %}
+                {{ results_count }} result{{ results_count|pluralize }} found for "<b>{{ query }}</b>"
+            {% else %}
+                No results found for "<b>{{ query }}</b>"
+            {% endif %}
+        </p>
+    {% endif %}
+
+    <!-- 🏍️ RESULTS -->
+    <div class="bikes-grid">
+        {% for bike in bikes %}
+            <div class="bike-card">
+                <img src="{{ bike.image.url }}" width="200">
+
+                <h3>{{ bike.brand }} {{ bike.name }}</h3>
+                <p>{{ bike.price }}</p>
+
+                <a href="{% url 'bike_detail' bike.id %}">
+                    View Details
+                </a>
+            </div>
+        {% empty %}
+            <p>No bikes to display</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

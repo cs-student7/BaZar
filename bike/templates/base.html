@@ -1,0 +1,134 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}My Site{% endblock %}</title>
+    <style>
+        body {
+            background-color: #f0f2f5; /* Put your background color or image here */
+            background-image: url('https://example.com/your-bg.jpg');
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <script>
+    // Same bike data for homepage suggestions
+    const homeBikesData = [
+        "Harley-Davidson Street 750", "Harley-Davidson Sportster S",
+        "Honda CB500F", "Honda CB1000R", "Honda CB300R", "Honda CBR650R",
+        "Yamaha YZF-R1", "Yamaha YZF-R3", "Yamaha MT-07", "Yamaha MT-09",
+        "Kawasaki Ninja 400", "Kawasaki Ninja H2", "Kawasaki Z900",
+        "KTM Duke 390", "KTM 390 Adventure", "KTM 1290 Super Duke", "KTM 250 Duke", "KTM 125 Duke",
+        "Ducati Scrambler", "Ducati Panigale V4", "Ducati Monster 797",
+        "Royal Enfield Classic 350", "Royal Enfield Bullet 350", "Royal Enfield Himalayan",
+        "BMW S1000RR", "BMW G310R", "BMW R1250GS", "BMW F 900 R",
+        "Suzuki GSX-R750", "Suzuki Katana", "Suzuki V-Strom 650",
+        "Triumph Bonneville", "Triumph Street Triple", "Triumph Speed 400",
+        "TVS Apache RTR 160", "TVS Apache RR 310",
+        "Bajaj Pulsar 150", "Bajaj Dominar 400", "Bajaj Pulsar NS200",
+        "Hero Splendor", "Hero Xtreme 160R", "Hero XPulse 200",
+        "Vespa LX 125", "Vespa Primavera", "Vespa Sprint",
+        "Aprilia RS 660", "Aprilia Tuono 660",
+        "Benelli TNT 600", "Benelli Leoncino",
+        "MV Agusta F3 800", "MV Agusta Brutale 1000"
+    ];
+
+    let activeHomeIndex = -1;
+
+    function showHomeSuggestions() {
+        const input = document.getElementById('homeSearch').value.trim().toLowerCase();
+        const box = document.getElementById('homeSuggestions');
+
+        if (!input || input.length < 1) {
+            box.style.display = 'none';
+            return;
+        }
+
+        const matches = homeBikesData.filter(name =>
+            name.toLowerCase().includes(input)
+        ).slice(0, 8);
+
+        if (matches.length === 0) {
+            box.innerHTML = '<div class="suggestion-item">No results found</div>';
+            box.style.display = 'block';
+            return;
+        }
+
+        let html = '<div class="suggestion-header">Suggestions</div>';
+        matches.forEach((name, index) => {
+            const regex = new RegExp(`(${input})`, 'gi');
+            const highlighted = name.replace(regex, '<span class="suggestion-highlight">$1</span>');
+            html += `
+                <div class="suggestion-item" onmousedown="selectHomeSuggestion('${name}')" data-index="${index}">
+                    🏍️ ${highlighted}
+                </div>`;
+        });
+
+        box.innerHTML = html;
+        box.style.display = 'block';
+        activeHomeIndex = -1;
+    }
+
+    function selectHomeSuggestion(name) {
+        document.getElementById('homeSearch').value = name;
+        document.getElementById('homeSuggestions').style.display = 'none';
+    }
+
+    function handleHomeKeyDown(event) {
+        const box = document.getElementById('homeSuggestions');
+        const items = box.querySelectorAll('.suggestion-item');
+
+        if (event.key === 'ArrowDown') {
+            activeHomeIndex = Math.min(activeHomeIndex + 1, items.length - 1);
+            items.forEach((item, i) => item.classList.toggle('active', i === activeHomeIndex));
+
+        } else if (event.key === 'ArrowUp') {
+            activeHomeIndex = Math.max(activeHomeIndex - 1, 0);
+            items.forEach((item, i) => item.classList.toggle('active', i === activeHomeIndex));
+
+        } else if (event.key === 'Escape') {
+            box.style.display = 'none';
+        }
+    }
+
+    // Close suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-form')) {
+            document.getElementById('homeSuggestions').style.display = 'none';
+        }
+    });
+</script>
+    </div> 
+</body>
+</html>
+<style>.search-feedback {
+    color: #ffffff;
+    font-size: 14px;
+    margin-top: 10px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+.search-feedback strong {
+    color: #ffa500;
+}
+
+.clear-search {
+    color: #ffa500;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 6px;
+}
+
+.clear-search:hover {
+    text-decoration: underline;
+}
+    </style>

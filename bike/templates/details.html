@@ -1,0 +1,751 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BaZar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        /* Cart Popup Modal */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .cart-modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .cart-modal-header h2 {
+            margin: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .cart-close-btn {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.3s ease;
+        }
+
+        .cart-close-btn:hover {
+            color: #333;
+        }
+
+        .cart-items-list {
+            margin: 20px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 4px solid rgb(119, 95, 255);
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: rgb(175, 111, 76);
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .remove-from-cart-btn {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .remove-from-cart-btn:hover {
+            background-color: #cc0000;
+        }
+
+        .cart-summary {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #ef2c2c, #e7383e);
+            color: white;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .cart-empty-message {
+            text-align: center;
+            padding: 30px;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: rgb(106, 127, 244);
+        }
+
+        .checkout-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .continue-shopping-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .continue-shopping-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: rgb(227, 32, 45);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 2000;
+            animation: slideInRight 0.4s ease-in-out, slideOutRight 0.4s ease-in-out 2.6s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .add-to-cart-btn {
+            background-color: #e87116;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            width: 100%;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: rgb(224, 77, 28);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span class="logo-icon"></span>
+                <span class="logo-text">BaZar</span>
+            </div>
+            <button class="btn btn-secondary" onclick="goBack()">←Back</button>
+            <button class="cart-icon" onclick="openCartModal()">
+                <span id="cart-count">0</span>
+                🛒
+            </button>
+            
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="filters">
+            <div class="filter-group">
+                <label for="brandFilter">Filter by Brand:</label>
+                <select id="brandFilter">
+                    <option value="">All Brands</option>
+                    <option value="Harley-Davidson">Harley-Davidson</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Yamaha">Yamaha</option>
+                    <option value="Kawasaki">Kawasaki</option>
+                    <option value="KTM">KTM</option>
+                    <option value="Ducati">Ducati</option>
+                    <option value="Suzuki">Suzuki</option>
+                    <option value="Triumph">Triumph</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Royal Enfield">Royal Enfield</option>
+                    <option value="TVS">TVS</option>
+                    <option value="Bajaj">Bajaj</option>
+                    <option value="Hero">Hero</option>
+                    <option value="Mahindra">Mahindra</option>
+                    <option value="Vespa">Vespa</option>
+                    <option value="Piaggio">Piaggio</option>
+                    <option value="Aprilia">Aprilia</option>
+                    <option value="MV Agusta">MV Agusta</option>
+                    <option value="Benelli">Benelli</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="priceFilter">Max Price:</label>
+                <input type="range" id="priceFilter" min="100000" max="3000000" step="100000" value="3000000">
+                <span id="priceValue">Rs 30,00,000</span>
+            </div>
+
+            <div class="filter-group">
+                <label for="conditionFilter">Condition:</label>
+                <select id="conditionFilter">
+                    <option value="">All Conditions</option>
+                    <option value="New">New</option>
+                    <option value="Used">Used</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="typeFilter">Type:</label>
+                <select id="typeFilter">
+                    <option value="">All Types</option>
+                    <option value="Motorcycle">Motorcycle</option>
+                    <option value="Scooter">Scooter</option>
+                    <option value="Cruiser">Cruiser</option>
+                    <option value="Sport">Sport</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <button class="reset-filters-btn" onclick="resetFilters()">Reset Filters</button>
+                <span class="bikes-count" id="bikesCount"></span>
+            </div>
+        </section>
+
+        <div class="bikes-grid" id="bikesGrid">
+            <!-- Bike cards will be dynamically inserted here -->
+        </div>
+
+        <div class="no-results" id="noResults" style="display: none; text-align: center; padding: 4rem 2rem;">
+            <h2>No bikes found</h2>
+            <p>Try adjusting your filters to see more results</p>
+        </div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <div class="cart-modal-header">
+                <h2>🛒 Your Cart</h2>
+                <button class="cart-close-btn" onclick="closeCartModal()">&times;</button>
+            </div>
+            <div id="cartItemsContainer">
+                <div class="cart-empty-message">Your cart is empty</div>
+            </div>
+            <div class="cart-summary" id="cartSummary" style="display: none;">
+                <div class="cart-total">
+                    <span>Total Amount:</span>
+                    <span id="totalAmount">Rs 0</span>
+                </div>
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+                <button class="continue-shopping-btn" onclick="closeCartModal()">Continue Shopping</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2024 BaZar. All rights reserved. Your trusted motorcycle & scooter marketplace.</p>
+    </footer>
+
+    <script>
+        // Comprehensive bike and scooter data with Nepali Prices (NPR Rs)
+        const bikesData = [
+            // Harley-Davidson Bikes
+            { id: 1, name: "Harley-Davidson Street 750", brand: "Harley-Davidson", price: 1200000, engine: "750 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Lightweight American cruiser with iconic style and modern performance." },
+            { id: 2, name: "Harley-Davidson Sportster S", brand: "Harley-Davidson", price: 1850000, engine: "1200 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Raw power and aggressive styling in a compact frame." },
+            { id: 3, name: "Harley-Davidson Road King", brand: "Harley-Davidson", price: 3800000, engine: "1868 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Classic touring cruiser with timeless charm and comfort." },
+            { id: 4, name: "Harley-Davidson Ultra Limited", brand: "Harley-Davidson", price: 4500000, engine: "1868 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Premium touring bike with advanced technology." },
+
+            // Honda Bikes
+            { id: 5, name: "Honda CB500F", brand: "Honda", price: 1100000, engine: "500 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Versatile middleweight with excellent handling and fuel efficiency." },
+            { id: 6, name: "Honda CB1000R", brand: "Honda", price: 1900000, engine: "1000 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Naked bike with retro styling and modern performance." },
+            { id: 7, name: "Honda CB300R", brand: "Honda", price: 680000, engine: "300 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Perfect beginner bike with agile handling." },
+            { id: 8, name: "Honda Gold Wing", brand: "Honda", price: 6200000, engine: "1833 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Ultimate touring machine with luxury features." },
+            { id: 9, name: "Honda CBR650R", brand: "Honda", price: 1320000, engine: "650 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "Mid-size sportbike with stunning performance." },
+            { id: 10, name: "Honda CB150R", brand: "Honda", price: 370000, engine: "150 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Reliable commuter bike with great fuel efficiency." },
+
+            // Yamaha Bikes
+            { id: 11, name: "Yamaha YZF-R1", brand: "Yamaha", price: 2900000, engine: "1000 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Superbike with cutting-edge technology and raw power." },
+            { id: 12, name: "Yamaha YZF-R3", brand: "Yamaha", price: 720000, engine: "321 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Lightweight sportbike perfect for beginners." },
+            { id: 13, name: "Yamaha MT-07", brand: "Yamaha", price: 1210000, engine: "689 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Aggressive middleweight with character." },
+            { id: 14, name: "Yamaha Tracer 900", brand: "Yamaha", price: 1580000, engine: "889 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Dynamic sport-touring bike." },
+            { id: 15, name: "Yamaha XSR900", brand: "Yamaha", price: 1770000, engine: "889 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Retro-styled middleweight with modern tech." },
+
+            // Kawasaki Bikes
+            { id: 16, name: "Kawasaki Ninja 400", brand: "Kawasaki", price: 725000, engine: "400 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Perfect beginner sport bike with nimble handling." },
+            { id: 17, name: "Kawasaki Ninja H2", brand: "Kawasaki", price: 4850000, engine: "998 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Supercharged hyperbike with extreme performance." },
+            { id: 18, name: "Kawasaki Z900", brand: "Kawasaki", price: 1320000, engine: "948 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Legendary naked bike with retro appeal." },
+            { id: 19, name: "Kawasaki Vulcan S", brand: "Kawasaki", price: 1180000, engine: "649 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Modern cruiser with tech-forward features." },
+
+            // KTM Bikes
+            { id: 20, name: "KTM Duke 390", brand: "KTM", price: 645000, engine: "390 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Aggressive naked bike with superior performance." },
+            { id: 21, name: "KTM 390 Adventure", brand: "KTM", price: 775000, engine: "390 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Budget-friendly adventure tourer." },
+            { id: 22, name: "KTM 1290 Super Duke", brand: "KTM", price: 3150000, engine: "1301 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Ultimate supernaked with insane power." },
+            { id: 23, name: "KTM 250 Duke", brand: "KTM", price: 450000, engine: "250 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Affordable entry-level sportbike." },
+
+            // Ducati Bikes
+            { id: 24, name: "Ducati Scrambler", brand: "Ducati", price: 1050000, engine: "803 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Retro scrambler with modern Italian engineering." },
+            { id: 25, name: "Ducati Panigale V4", brand: "Ducati", price: 4030000, engine: "1103 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Flagship superbike with championship DNA." },
+            { id: 26, name: "Ducati Monster 797", brand: "Ducati", price: 1290000, engine: "803 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Iconic naked bike with minimalist design." },
+            { id: 27, name: "Ducati Desert Sled", brand: "Ducati", price: 1530000, engine: "937 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Adventure-styled scrambler." },
+
+            // Royal Enfield Bikes
+            { id: 28, name: "Royal Enfield Classic 350", brand: "Royal Enfield", price: 680000, engine: "350 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Cruiser", description: "Iconic retro design with excellent cruising comfort." },
+            { id: 29, name: "Royal Enfield Bullet 350", brand: "Royal Enfield", price: 612000, engine: "350 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Cruiser", description: "Legendary timeless design." },
+            { id: 30, name: "Royal Enfield Meteor 350", brand: "Royal Enfield", price: 693000, engine: "350 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Cruiser", description: "Modern cruiser with retro charm." },
+            { id: 31, name: "Royal Enfield Interceptor 650", brand: "Royal Enfield", price: 1031000, engine: "648 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Twin-cylinder parallel twin with retro styling." },
+            { id: 32, name: "Royal Enfield Continental GT 650", brand: "Royal Enfield", price: 1096000, engine: "648 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Modern café racer design." },
+
+            // BMW Bikes
+            { id: 33, name: "BMW F 900 R", brand: "BMW", price: 1484000, engine: "900 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Modern roadster with German engineering excellence." },
+            { id: 34, name: "BMW S1000RR", brand: "BMW", price: 3063000, engine: "999 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Hypersportbike with racing heritage." },
+            { id: 35, name: "BMW G310R", brand: "BMW", price: 645000, engine: "313 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Lightweight entry-level roadster." },
+            { id: 36, name: "BMW R1250GS", brand: "BMW", price: 2982000, engine: "1254 CC", year: 2023, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Adventure touring legend." },
+
+            // Suzuki Bikes
+            { id: 37, name: "Suzuki GSX-R750", brand: "Suzuki", price: 1451000, engine: "750 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Reliable sport bike with legendary performance." },
+            { id: 38, name: "Suzuki Katana", brand: "Suzuki", price: 1338000, engine: "999 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Legendary design meets modern tech." },
+            { id: 39, name: "Suzuki V-Strom 650", brand: "Suzuki", price: 1161000, engine: "645 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Versatile adventure tourer." },
+            { id: 40, name: "Suzuki Burgman 400 Scooter", brand: "Suzuki", price: 870000, engine: "400 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Premium maxi-scooter with comfort." },
+
+            // Triumph Bikes
+            { id: 41, name: "Triumph Bonneville", brand: "Triumph", price: 1393000, engine: "900 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Classic British roadster with modern reliability." },
+            { id: 42, name: "Triumph Street Triple", brand: "Triumph", price: 1306000, engine: "765 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Nimble middleweight with character." },
+            { id: 43, name: "Triumph Thruxton", brand: "Triumph", price: 1596000, engine: "1200 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Café racer with authentic British style." },
+            { id: 44, name: "Triumph Speed Twin", brand: "Triumph", price: 1467000, engine: "1200 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Modern parallel twin with retro design." },
+
+            // TVS Bikes
+            { id: 45, name: "TVS Apache RTR 160", brand: "TVS", price: 258000, engine: "160 CC", year: 2024, condition: "New", warranty: "4 Years", type: "Motorcycle", description: "High-performance commuter bike." },
+            { id: 46, name: "TVS Apache RR 310", brand: "TVS", price: 564000, engine: "310 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "Entry-level sportbike with aggressive styling." },
+            { id: 47, name: "TVS Jupiter Scooter", brand: "TVS", price: 193000, engine: "110 CC", year: 2024, condition: "New", warranty: "4 Years", type: "Scooter", description: "Popular family scooter." },
+
+            // Bajaj Bikes
+            { id: 48, name: "Bajaj Pulsar 150", brand: "Bajaj", price: 258000, engine: "150 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Popular sporty commuter with aggressive styling." },
+            { id: 49, name: "Bajaj Dominar 400", brand: "Bajaj", price: 580000, engine: "400 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Powerful street bike." },
+            { id: 50, name: "Bajaj Avenger 220", brand: "Bajaj", price: 338000, engine: "220 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Cruiser", description: "Affordable cruiser bike." },
+            { id: 51, name: "Bajaj Chetak Scooter", brand: "Bajaj", price: 225000, engine: "125 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Scooter", description: "Retro electric scooter option." },
+
+            // Hero Bikes
+            { id: 52, name: "Hero MotoCorp Splendor", brand: "Hero", price: 193000, engine: "100 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Best-selling commuter bike with excellent mileage." },
+            { id: 53, name: "Hero Xtreme 160R", brand: "Hero", price: 241000, engine: "160 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Sporty commuter with powerful design." },
+            { id: 54, name: "Hero HF Deluxe", brand: "Hero", price: 177000, engine: "100 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Budget-friendly reliable commuter." },
+
+            // Mahindra Bikes
+            { id: 55, name: "Mahindra Centuro", brand: "Mahindra", price: 217000, engine: "100 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Economy commuter bike." },
+
+            // Vespa Scooters
+            { id: 56, name: "Vespa LX 125", brand: "Vespa", price: 354000, engine: "125 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Classic Italian scooter with timeless design." },
+            { id: 57, name: "Vespa Primavera", brand: "Vespa", price: 386000, engine: "150 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Modern version of the iconic Vespa." },
+            { id: 58, name: "Vespa Sprint", brand: "Vespa", price: 418000, engine: "150 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Sporty styling with Vespa heritage." },
+
+            // Piaggio Scooters
+            { id: 59, name: "Piaggio Aprilia SR 125", brand: "Piaggio", price: 306000, engine: "125 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Affordable quality scooter." },
+            { id: 60, name: "Piaggio Liberty 150", brand: "Piaggio", price: 338000, engine: "150 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Practical urban scooter." },
+
+            // Aprilia Bikes
+            { id: 61, name: "Aprilia RS 660", brand: "Aprilia", price: 1531000, engine: "659 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Middleweight sportbike with Italian flair." },
+            { id: 62, name: "Aprilia Tuono 660", brand: "Aprilia", price: 1483000, engine: "659 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Aggressive naked sportbike." },
+            { id: 63, name: "Aprilia SXV 450", brand: "Aprilia", price: 1096000, engine: "450 CC", year: 2023, condition: "Used", warranty: "1 Year", type: "Motorcycle", description: "Sporty street fighter." },
+
+            // MV Agusta Bikes
+            { id: 64, name: "MV Agusta F3 800", brand: "MV Agusta", price: 2419000, engine: "798 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Three-cylinder superbike." },
+            { id: 65, name: "MV Agusta Brutale 1000", brand: "MV Agusta", price: 2822000, engine: "998 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Powerful naked bike with Italian design." },
+
+            // Benelli Bikes
+            { id: 66, name: "Benelli TNT 600", brand: "Benelli", price: 838000, engine: "600 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Chinese-Italian collaboration." },
+            { id: 67, name: "Benelli Leoncino", brand: "Benelli", price: 935000, engine: "500 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Retro-styled adventure bike." },
+
+            // More bikes
+            { id: 68, name: "Hero Splendor iSmart", brand: "Hero", price: 209000, engine: "100 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Smart commuter with advanced features." },
+            { id: 69, name: "Bajaj Pulsar NS200", brand: "Bajaj", price: 370000, engine: "200 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "Sporty middleweight bike." },
+            { id: 70, name: "TVS Apache RTR 200", brand: "TVS", price: 338000, engine: "200 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "High-performance sports bike." },
+            { id: 71, name: "Honda CB Hornet 160R", brand: "Honda", price: 290000, engine: "160 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Versatile commuter bike." },
+            { id: 72, name: "Yamaha FZS-FI", brand: "Yamaha", price: 306000, engine: "150 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Feature-rich commuter." },
+            { id: 73, name: "Suzuki Intruder 150", brand: "Suzuki", price: 322000, engine: "150 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Cruiser styling at budget price." },
+            { id: 74, name: "Royal Enfield Hunter 350", brand: "Royal Enfield", price: 725000, engine: "350 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Modern roadster from Royal Enfield." },
+            { id: 75, name: "Triumph Speed 400", brand: "Triumph", price: 612000, engine: "398 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Affordable Triumph middleweight." },
+            { id: 76, name: "BMW G310GS", brand: "BMW", price: 725000, engine: "313 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Lightweight adventure bike." },
+            { id: 77, name: "KTM 125 Duke", brand: "KTM", price: 290000, engine: "125 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Entry-level aggressive bike." },
+            { id: 78, name: "Kawasaki Versys 650", brand: "Kawasaki", price: 1258000, engine: "649 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Sport-touring versatility." },
+            { id: 79, name: "Ducati Diavel", brand: "Ducati", price: 2580000, engine: "1262 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Power cruiser with Ducati engineering." },
+            { id: 80, name: "Harley-Davidson Pan America", brand: "Harley-Davidson", price: 3950000, engine: "1250 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Adventure touring from Milwaukee." },
+            { id: 81, name: "Yamaha Nmax Scooter", brand: "Yamaha", price: 516000, engine: "155 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Premium maxi-scooter." },
+            { id: 82, name: "Honda PCX Scooter", brand: "Honda", price: 451000, engine: "150 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Scooter", description: "Best-selling scooter worldwide." },
+            { id: 83, name: "Aprilia SR Max Scooter", brand: "Aprilia", price: 564000, engine: "300 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Sporty maxi-scooter." },
+            { id: 84, name: "Vespa Sxl 125", brand: "Vespa", price: 403000, engine: "125 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Scooter", description: "Luxury Vespa option." },
+            { id: 85, name: "Mahindra Gusto 125", brand: "Mahindra", price: 177000, engine: "125 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Scooter", description: "Affordable family scooter." },
+            { id: 86, name: "Bajaj Burgman Street", brand: "Bajaj", price: 258000, engine: "125 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Scooter", description: "Compact urban scooter." },
+            { id: 87, name: "Hero Pleasure", brand: "Hero", price: 145000, engine: "110 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Scooter", description: "Women-oriented family scooter." },
+            { id: 88, name: "Kawasaki KLR 650", brand: "Kawasaki", price: 1177000, engine: "651 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Adventure bike workhorse." },
+            { id: 89, name: "Yamaha Tenere 700", brand: "Yamaha", price: 1774000, engine: "689 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Modern adventure touring." },
+            { id: 90, name: "Honda CB500X", brand: "Honda", price: 1048000, engine: "471 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Middleweight adventure bike." },
+            { id: 91, name: "Suzuki DR-Z400S", brand: "Suzuki", price: 774000, engine: "398 CC", year: 2023, condition: "Used", warranty: "1 Year", type: "Motorcycle", description: "Dual-sport adventure bike." },
+            { id: 92, name: "KTM 1290 Adventure", brand: "KTM", price: 2983000, engine: "1301 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Premium adventure touring." },
+            { id: 93, name: "BMW R1200GS", brand: "BMW", price: 3145000, engine: "1200 CC", year: 2023, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Adventure touring icon." },
+            { id: 94, name: "Harley-Davidson Low Rider", brand: "Harley-Davidson", price: 1935000, engine: "1868 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Low-slung cruiser styling." },
+            { id: 95, name: "Triumph Scrambler 1200", brand: "Triumph", price: 2016000, engine: "1200 CC", year: 2023, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Modern scrambler with vintage charm." },
+            { id: 96, name: "Ducati XDiavel", brand: "Ducati", price: 2822000, engine: "937 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Cruiser", description: "Modern power cruiser." },
+            { id: 97, name: "Royal Enfield Himalayan", brand: "Royal Enfield", price: 870000, engine: "411 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Purpose-built adventure bike." },
+            { id: 98, name: "TVS Apache RTR 180", brand: "TVS", price: 290000, engine: "180 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "Sporty middleweight commuter." },
+            { id: 99, name: "Bajaj Pulsar 250", brand: "Bajaj", price: 451000, engine: "250 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Sport", description: "Performance-oriented commuter." },
+            { id: 100, name: "Hero XPulse 200", brand: "Hero", price: 322000, engine: "200 CC", year: 2024, condition: "New", warranty: "5 Years", type: "Motorcycle", description: "Budget adventure bike." },
+            { id: 101, name: "Yamaha MT-09", brand: "Yamaha", price: 1693000, engine: "889 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Motorcycle", description: "Thrilling middleweight naked." },
+            { id: 102, name: "Honda NC750X", brand: "Honda", price: 1338000, engine: "745 CC", year: 2024, condition: "New", warranty: "3 Years", type: "Motorcycle", description: "Practical adventure bike." },
+            { id: 103, name: "Suzuki GSX-S1000", brand: "Suzuki", price: 1774000, engine: "999 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Powerful middleweight superbike." },
+            { id: 104, name: "Kawasaki Ninja 650", brand: "Kawasaki", price: 1113000, engine: "649 CC", year: 2024, condition: "New", warranty: "2 Years", type: "Sport", description: "Nimble middleweight sportbike." },
+            { id: 105, name: "KTM 450 SMR", brand: "KTM", price: 1000000, engine: "449 CC", year: 2023, condition: "Used", warranty: "1 Year", type: "Motorcycle", description: "Supermoto beast." },
+        ];
+
+        // Cart Management
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Update cart count
+        function updateCartCount() {
+            document.getElementById('cart-count').textContent = cart.length;
+        }
+
+        // Function to render bike cards
+        function renderBikes(bikesToRender) {
+            const bikesGrid = document.getElementById('bikesGrid');
+            const noResults = document.getElementById('noResults');
+            const bikesCount = document.getElementById('bikesCount');
+
+            bikesGrid.innerHTML = '';
+
+            if (bikesToRender.length === 0) {
+                noResults.style.display = 'block';
+                bikesCount.textContent = 'No bikes found';
+                return;
+            }
+
+            noResults.style.display = 'none';
+            bikesCount.textContent = `Showing ${bikesToRender.length} of ${bikesData.length} bikes`;
+
+            bikesToRender.forEach(bike => {
+                const bikeCard = document.createElement('div');
+                bikeCard.className = 'bike-card';
+                bikeCard.innerHTML = `
+                    <div class="bike-image-container">
+                        <div class="bike-image">🏍️</div>
+                        <span class="bike-badge ${bike.condition === 'New' ? 'new' : 'used'}">${bike.condition.toUpperCase()}</span>
+                    </div>
+                    <div class="bike-content">
+                        <h3 class="bike-name">${bike.name}</h3>
+                        <div class="bike-price">Rs ${bike.price.toLocaleString('en-NP')}</div>
+                        <div class="bike-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Engine</span>
+                                <span class="spec-value">${bike.engine}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Year</span>
+                                <span class="spec-value">${bike.year}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Type</span>
+                                <span class="spec-value">${bike.type}</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Warranty</span>
+                                <span class="spec-value">${bike.warranty}</span>
+                            </div>
+                        </div>
+                        <p class="bike-description">${bike.description}</p>
+                        <button class="add-to-cart-btn" onclick="addToCart(${bike.id}, '${bike.name}', ${bike.price})">
+                            Add to Cart
+                        </button>
+                    </div>
+                `;
+                bikesGrid.appendChild(bikeCard);
+            });
+        }
+
+        // Add to cart function
+        function addToCart(bikeId, bikeName, price) {
+            const bikeItem = {
+                id: bikeId,
+                name: bikeName,
+                price: price
+            };
+
+            cart.push(bikeItem);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            showSuccessMessage(`✓ ${bikeName} added to cart!`);
+        }
+
+        // Show success message
+        function showSuccessMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'success-message';
+            messageDiv.textContent = message;
+            document.body.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 3000);
+        }
+
+        // Open cart modal
+        function openCartModal() {
+            document.getElementById('cartModal').style.display = 'block';
+            displayCart();
+        }
+
+        // Close cart modal
+        function closeCartModal() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Display cart items
+        function displayCart() {
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const cartSummary = document.getElementById('cartSummary');
+            const totalAmountSpan = document.getElementById('totalAmount');
+
+            cartItemsContainer.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="cart-empty-message">Your cart is empty</div>';
+                cartSummary.style.display = 'none';
+                return;
+            }
+
+            cartSummary.style.display = 'block';
+            let totalAmount = 0;
+
+            cart.forEach((item, index) => {
+                totalAmount += item.price;
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.className = 'cart-item';
+                cartItemDiv.innerHTML = `
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">Rs ${item.price.toLocaleString('en-NP')}</div>
+                    </div>
+                    <div class="cart-item-actions">
+                        <button class="remove-from-cart-btn" onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(cartItemDiv);
+            });
+
+            totalAmountSpan.textContent = 'Rs ' + totalAmount.toLocaleString('en-NP');
+        }
+
+        // Remove from cart
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            displayCart();
+            showSuccessMessage('✓ Item removed from cart!');
+        }
+
+        // Checkout function
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            const totalAmount = cart.reduce((sum, item) => sum + item.price, 0);
+            alert(`Proceeding to checkout!\n\nTotal Amount: Rs ${totalAmount.toLocaleString('en-NP')}\n\nThank you for your purchase!`);
+            
+            // Clear cart after checkout
+            cart = [];
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            closeCartModal();
+            displayCart();
+            showSuccessMessage('✓ Order placed successfully!');
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Filter and display bikes
+        function updateFilterAndDisplay() {
+            const brandFilter = document.getElementById('brandFilter').value;
+            const priceFilter = parseInt(document.getElementById('priceFilter').value);
+            const conditionFilter = document.getElementById('conditionFilter').value;
+            const typeFilter = document.getElementById('typeFilter').value;
+
+            // Update price display
+            document.getElementById('priceValue').textContent = 'Rs ' + priceFilter.toLocaleString('en-NP');
+
+            // Filter bikes
+            const filteredBikes = bikesData.filter(bike => {
+                const matchesBrand = !brandFilter || bike.brand === brandFilter;
+                const matchesPrice = bike.price <= priceFilter;
+                const matchesCondition = !conditionFilter || bike.condition === conditionFilter;
+                const matchesType = !typeFilter || bike.type === typeFilter;
+
+                return matchesBrand && matchesPrice && matchesCondition && matchesType;
+            });
+
+            renderBikes(filteredBikes);
+        }
+
+        // Reset filters
+        function resetFilters() {
+            document.getElementById('brandFilter').value = '';
+            document.getElementById('priceFilter').value = '3000000';
+            document.getElementById('conditionFilter').value = '';
+            document.getElementById('typeFilter').value = '';
+            document.getElementById('priceValue').textContent = 'Rs 30,00,000';
+            renderBikes(bikesData);
+        }
+
+        // Filter event listeners
+        document.getElementById('brandFilter').addEventListener('change', updateFilterAndDisplay);
+        document.getElementById('priceFilter').addEventListener('input', updateFilterAndDisplay);
+        document.getElementById('conditionFilter').addEventListener('change', updateFilterAndDisplay);
+        document.getElementById('typeFilter').addEventListener('change', updateFilterAndDisplay);
+
+        // Initial render
+        renderBikes(bikesData);
+        updateCartCount();
+
+        // Back button function
+function goBack() {
+    // Try to go back in history first
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        // If no history, redirect to bike_list home page
+        window.location.href = '/bikes/';
+    }
+}
+
+
+
+    </script>
+</body>
+</html>

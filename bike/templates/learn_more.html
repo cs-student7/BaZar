@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn More - BaZar</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">BaZar</div>
+    
+    </ul>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="learn-more-container">
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1>Learn More About BaZar</h1>
+        <p>Your Ultimate Motorcycle Shopping & Test Ride Platform</p>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section">
+        <h2>About BaZar</h2>
+        <p>
+            BaZar is a premium online marketplace dedicated to connecting motorcycle enthusiasts with their dream bikes. 
+            We provide a seamless platform to browse, compare, and book test rides for thousands of motorcycles from top brands.
+        </p>
+        <p>
+            Whether you're a first-time buyer or an experienced rider, BaZar makes finding your perfect ride easy and convenient. 
+            Our mission is to revolutionize the way people buy motorcycles.
+        </p>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <h2 style="text-align: center; font-size: 32px; margin-bottom: 30px; color: #333;">Why Choose BaZar?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🚲</div>
+            <h3>100+ Bikes</h3>
+            <p>Choose from a wide selection of motorcycles from all top brands and models.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h3>Easy Booking</h3>
+            <p>Book test rides instantly without any hassle. Choose your date and time.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Best Prices</h3>
+            <p>Get the best deals on motorcycles with transparent pricing and no hidden costs.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Secure Transactions</h3>
+            <p>Your data and transactions are protected with industry-leading security.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📞</div>
+            <h3>Expert Support</h3>
+            <p>Our support team is available 24/7 to assist you with any questions.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⭐</div>
+            <h3>Verified Reviews</h3>
+            <p>Read authentic reviews from verified buyers to make informed decisions.</p>
+        </div>
+    </div>
+
+    <!-- WHY CHOOSE US -->
+    <section class="why-choose-us">
+        <h2>What Sets Us Apart</h2>
+        <div class="reasons-list">
+            <div class="reason-item">
+                <div class="reason-number">1</div>
+                <div class="reason-text">
+                    <h4>Extensive Inventory</h4>
+                    <p>We partner with top dealerships to bring you the largest selection of bikes in one place.</p>
+                </div>
+            </div>
+            <div class="reason-item">
+                <div class="reason-number">2</div>
+                <div class="reason-text">
+                    <h4>Instant Booking</h4>
+                    <p>Book test rides in seconds without paperwork or complicated procedures.</p>
+                </div>
+            </div>
+            <div class="reason-item">
+                <div class="reason-number">3</div>
+                <div class="reason-text">
+                    <h4>Price Comparison</h4>
+                    <p>Compare prices across brands and models to find the best deal for your budget.</p>
+                </div>
+            </div>
+            <div class="reason-item">
+                <div class="reason-number">4</div>
+                <div class="reason-text">
+                    <h4>Expert Guidance</h4>
+                    <p>Get personalized recommendations based on your riding style and preferences.</p>
+                </div>
+            </div>
+            <div class="reason-item">
+                <div class="reason-number">5</div>
+                <div class="reason-text">
+                    <h4>Community Reviews</h4>
+                    <p>Learn from real rider experiences and make informed purchasing decisions.</p>
+                </div>
+            </div>
+            <div class="reason-item">
+                <div class="reason-number">6</div>
+                <div class="reason-text">
+                    <h4>After-Sales Support</h4>
+                    <p>We continue to support you even after your purchase with maintenance tips and guides.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <div class="faq-question">How do I book a test ride? <span>+</span></div>
+            <div class="faq-answer">Simply browse the bikes you're interested in, click "Book Test Ride", select your preferred date and time, and fill in your details.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question">Is there a booking fee? <span>+</span></div>
+            <div class="faq-answer">No, booking a test ride on BaZar is completely free.</div>
+        </div>
+    </section>
+
+</div>
+
+<!-- FOOTER -->
+<footer style="background: #333; color: white; text-align: center; padding: 30px 20px; margin-top: 50px;">
+    <p>&copy; 2024 Bikes BaZar. All rights reserved.</p>
+</footer>
+
+<script>
+    // FAQ Toggle
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+        });
+    });
+</script>
+
+</body>
+</html>
